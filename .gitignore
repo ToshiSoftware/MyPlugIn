@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# ビルド中間ファイル
+.build/
+.swiftpm/
+DerivedData/
+
+# Xcode ユーザー設定
+xcuserdata/
+*.xcuserstate
+
+# 作業用・ローカル専用
+/.vscode/

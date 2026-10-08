@@ -1,0 +1,317 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 71;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A00000000000000000000001 /* MyReverbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000001 /* MyReverbApp.swift */; };
+		A00000000000000000000002 /* MyReverbAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* MyReverbAudioUnit.swift */; };
+		A00000000000000000000003 /* AudioUnitFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* AudioUnitFactory.swift */; };
+		A00000000000000000000004 /* MyReverbExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B00000000000000000000004 /* MyReverbExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		H00000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = I00000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E00000000000000000000002;
+			remoteInfo = MyReverbExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C00000000000000000000001 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A00000000000000000000004 /* MyReverbExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B00000000000000000000001 /* MyReverbApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReverbApp.swift; sourceTree = "<group>"; };
+		B00000000000000000000002 /* MyReverbAudioUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyReverbAudioUnit.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* AudioUnitFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioUnitFactory.swift; sourceTree = "<group>"; };
+		B00000000000000000000004 /* MyReverbExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyReverbExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000005 /* MyReverb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyReverb.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B00000000000000000000007 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B00000000000000000000008 /* MyReverbExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyReverbExtension.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C00000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C00000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D00000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				D00000000000000000000002 /* MyReverbApp */,
+				D00000000000000000000003 /* MyReverbExtension */,
+				D00000000000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D00000000000000000000002 /* MyReverbApp */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000001 /* MyReverbApp.swift */,
+				B00000000000000000000006 /* Info.plist */,
+			);
+			path = MyReverbApp;
+			sourceTree = "<group>";
+		};
+		D00000000000000000000003 /* MyReverbExtension */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000002 /* MyReverbAudioUnit.swift */,
+				B00000000000000000000003 /* AudioUnitFactory.swift */,
+				B00000000000000000000007 /* Info.plist */,
+				B00000000000000000000008 /* MyReverbExtension.entitlements */,
+			);
+			path = MyReverbExtension;
+			sourceTree = "<group>";
+		};
+		D00000000000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000005 /* MyReverb.app */,
+				B00000000000000000000004 /* MyReverbExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E00000000000000000000001 /* MyReverb */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F00000000000000000000001 /* Build configuration list for PBXNativeTarget "MyReverb" */;
+			buildPhases = (
+				C00000000000000000000004 /* Sources */,
+				C00000000000000000000002 /* Frameworks */,
+				C00000000000000000000001 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				G00000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = MyReverb;
+			productName = MyReverb;
+			productReference = B00000000000000000000005 /* MyReverb.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E00000000000000000000002 /* MyReverbExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F00000000000000000000002 /* Build configuration list for PBXNativeTarget "MyReverbExtension" */;
+			buildPhases = (
+				C00000000000000000000005 /* Sources */,
+				C00000000000000000000003 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyReverbExtension;
+			productName = MyReverbExtension;
+			productReference = B00000000000000000000004 /* MyReverbExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		I00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+			};
+			buildConfigurationList = F00000000000000000000003 /* Build configuration list for PBXProject "MyReverb" */;
+			compatibilityVersion = "Xcode 16.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D00000000000000000000001;
+			productRefGroup = D00000000000000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E00000000000000000000001 /* MyReverb */,
+				E00000000000000000000002 /* MyReverbExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C00000000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000001 /* MyReverbApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C00000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000002 /* MyReverbAudioUnit.swift in Sources */,
+				A00000000000000000000003 /* AudioUnitFactory.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		G00000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E00000000000000000000002 /* MyReverbExtension */;
+			targetProxy = H00000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		J00000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = MyReverbApp/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyReverb;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		J00000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = MyReverbApp/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyReverb;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		J00000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				CODE_SIGN_ENTITLEMENTS = MyReverbExtension/MyReverbExtension.entitlements;
+				INFOPLIST_FILE = MyReverbExtension/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyReverb.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		J00000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				CODE_SIGN_ENTITLEMENTS = MyReverbExtension/MyReverbExtension.entitlements;
+				INFOPLIST_FILE = MyReverbExtension/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyReverb.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		J00000000000000000000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+			};
+			name = Debug;
+		};
+		J00000000000000000000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F00000000000000000000001 /* Build configuration list for PBXNativeTarget "MyReverb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				J00000000000000000000001 /* Debug */,
+				J00000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F00000000000000000000002 /* Build configuration list for PBXNativeTarget "MyReverbExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				J00000000000000000000003 /* Debug */,
+				J00000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F00000000000000000000003 /* Build configuration list for PBXProject "MyReverb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				J00000000000000000000005 /* Debug */,
+				J00000000000000000000006 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = I00000000000000000000001 /* Project object */;
+}
