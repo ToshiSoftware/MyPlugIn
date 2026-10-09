@@ -7,6 +7,8 @@ as AUv3 extensions for other hosts (Logic, ...).
 |---|---|---|
 | MyReverb | `MRev` | Plate reverb: HPF, LPF, RT, PD, MIX ([Docs/MyReverb.md](Docs/MyReverb.md)) |
 | MyDelay | `MDly` | Mono / Stereo / Doubler / Ping-Pong delay ([Docs/MyDelay.md](Docs/MyDelay.md)) |
+| MyChannelStrip | `MStp` | 4-band EQ with spectrum, compressor, output gain ([Docs/MyChannelStrip.md](Docs/MyChannelStrip.md)) |
+| MyMaximizer | `MMax` | Mastering limiter: input gain, upward compression, look-ahead ceiling with attack/release (10 ms latency), history graph ([Docs/MyMaximizer.md](Docs/MyMaximizer.md)) |
 
 In MyDAW they are "MyDAW: MyReverb" etc. (`aufx` subtype `MyDA`); in other
 hosts "Toka: MyReverb" etc. (`aufx` subtype `Toka`). Subtypes, parameter
@@ -18,11 +20,16 @@ addresses and identifiers are saved in projects: never change them.
 Package.swift            one package; `plugIns` lists the effects
 Sources/
   MyPlugInCore/          shared by every effect
-    AudioUnit/           MyFXAudioUnit (base AU), MyFXParameter, MyFXKernel,
+    AudioUnit/           MyFXAudioUnit (base AU), MyFXParameter, MyFXKernel
+                         (latencySamples is reported as the AU's latency),
                          MyFXExtensionViewController (AUv3 extensions)
-    Editor/              300 x 400 editor in MyDAW's mixer look
+    Editor/              editor in MyDAW's mixer look (300 x 424 unless an effect
+                         sets MyFXAudioUnit.editorSize), with the channel name
+                         from the host's AU contextName; meter rows (optional
+                         CLIP lamp), vertical and horizontal faders
     Rendering/           render block, input/output peak meters
-  MyReverb/, MyDelay/    one folder per effect: Parameter, Kernel, AudioUnit, Editor
+  MyReverb/, MyDelay/,   one folder per effect: Parameter, Kernel, AudioUnit, Editor
+  MyChannelStrip/, MyMaximizer/
   MyPlugInCatalog/       the list of effects; hosts register them all from here
 Tests/                   one test target per effect, plus Core and Catalog
 Tools/

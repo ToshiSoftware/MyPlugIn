@@ -130,7 +130,7 @@ final class MyDelayAudioUnitTests: XCTestCase {
         }
         wait(for: [delivered], timeout: 2)
         let editor = try XCTUnwrap(controller as? MyFXEditorViewController)
-        XCTAssertEqual(editor.view.frame.size, NSSize(width: 300, height: 400))
+        XCTAssertEqual(editor.view.frame.size, NSSize(width: 300, height: 424))
         editor.model.setOnce(address(.mode), 0)
         XCTAssertEqual(unit.parameterTree?.parameter(withAddress: address(.mode))?.value, 0)
     }

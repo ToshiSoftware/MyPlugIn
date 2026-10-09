@@ -44,4 +44,17 @@ final class MyPlugInCoreTests: XCTestCase {
                                                     componentManufacturer: 1, componentFlags: 0, componentFlagsMask: 0)
         XCTAssertThrowsError(try MyFXAudioUnit(componentDescription: description, options: []))
     }
+
+    func testMeterStateLatchesClipUntilCleared() {
+        var state = MyFXMeterState()
+        state.update(left: 0.999, right: 0.5, interval: 1.0 / 30)
+        XCTAssertFalse(state.clipped)
+        state.update(left: 0.2, right: 1.0, interval: 1.0 / 30)
+        XCTAssertTrue(state.clipped)
+        state.update(left: 0, right: 0, interval: 1.0 / 30)
+        XCTAssertTrue(state.clipped)
+        state.clearPeaks()
+        XCTAssertFalse(state.clipped)
+        XCTAssertEqual(state.maximum, 0)
+    }
 }

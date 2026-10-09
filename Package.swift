@@ -14,6 +14,8 @@ import PackageDescription
 let plugIns = [
     "MyReverb",
     "MyDelay",
+    "MyChannelStrip",
+    "MyMaximizer",
     // new-plugin.sh: plug-ins
 ]
 
