@@ -284,11 +284,11 @@ final class MaximizerKernelTests: XCTestCase {
     func testUpwardLiftsQuietMusicOnly() {
         XCTAssertEqual(boost(after: sine(500, decibels: -30, seconds: 4), [:]), 2, accuracy: 0.1)
         XCTAssertEqual(boost(after: sine(500, decibels: -30, seconds: 6), [.upward: 6]), 6, accuracy: 0.15)
-        XCTAssertEqual(boost(after: sine(500, decibels: -6, seconds: 2), [:]), 0, accuracy: 0.01)
+        XCTAssertEqual(boost(after: sine(500, decibels: -3, seconds: 2), [:]), 0, accuracy: 0.01)
         // Silence from the start: nothing to lift.
         XCTAssertEqual(boost(after: sine(500, decibels: -80, seconds: 2), [:]), 0, accuracy: 0.01)
-        // Near the -12 dB threshold the boost is only the difference.
-        XCTAssertEqual(boost(after: sine(500, decibels: -13, seconds: 4), [:]), 1, accuracy: 0.1)
+        // Near the -6 dB threshold the boost is only the difference.
+        XCTAssertEqual(boost(after: sine(500, decibels: -7, seconds: 4), [:]), 1, accuracy: 0.1)
     }
 
     /// Attack = the limiter's ATTACK, release = ten times its RELEASE.
@@ -299,7 +299,7 @@ final class MaximizerKernelTests: XCTestCase {
         for _ in 0..<Int(4 * sampleRate) { _ = upward.gain(level: 0.03, amount: 2) }
         XCTAssertEqual(upward.boost, 2, accuracy: 0.02)
         // Loud, ATTACK 0: gone at once.
-        _ = upward.gain(level: 0.5, amount: 2)
+        _ = upward.gain(level: 0.9, amount: 2)
         XCTAssertEqual(upward.boost, 0)
         // Quiet again: 500 ms (10 x 50 ms) to come back.
         for _ in 0..<Int(0.5 * sampleRate) { _ = upward.gain(level: 0.03, amount: 2) }
@@ -307,7 +307,7 @@ final class MaximizerKernelTests: XCTestCase {
 
         upward.setTimes(attackMilliseconds: 10, releaseMilliseconds: 50)
         for _ in 0..<Int(4 * sampleRate) { _ = upward.gain(level: 0.03, amount: 2) }
-        for _ in 0..<Int(0.01 * sampleRate) { _ = upward.gain(level: 0.5, amount: 2) }
+        for _ in 0..<Int(0.01 * sampleRate) { _ = upward.gain(level: 0.9, amount: 2) }
         XCTAssertEqual(upward.boost, 2 * exp(-1), accuracy: 0.1)
     }
 
@@ -359,7 +359,7 @@ final class MaximizerKernelTests: XCTestCase {
     func testHistoryColumns() {
         let kernel = makeKernel([.inputGain: 12])
         let length = MaximizerHistory.columnFrames(sampleRate: sampleRate)
-        XCTAssertEqual(length, 507)
+        XCTAssertEqual(length, 254)
         _ = render(kernel, sine(1_000, decibels: -3, seconds: Double(length * 10) / sampleRate))
         XCTAssertEqual(kernel.history.count, 10)
         let (columns, next) = kernel.history.read(since: 0)
@@ -389,8 +389,11 @@ final class MaximizerKernelTests: XCTestCase {
     func testBypassedColumnsAreMarked() {
         let kernel = makeKernel()
         kernel.isBypassed = true
-        _ = render(kernel, [Float](repeating: 0.1, count: MaximizerHistory.columnFrames(sampleRate: sampleRate) * 3))
-        XCTAssertTrue(kernel.history.read(since: 0).columns.allSatisfy(\.isBypassed))
+        _ = render(kernel, [Float](repeating: 0.1, count: MaximizerHistory.columnFrames(sampleRate: sampleRate) * 4))
+        // The first column (5 ms) is mostly the 10 ms crossfade into bypass.
+        let columns = kernel.history.read(since: 0).columns
+        XCTAssertEqual(columns.count, 4)
+        XCTAssertTrue(columns.dropFirst().allSatisfy(\.isBypassed))
     }
 
     func testGraphMergesColumns() {
@@ -414,8 +417,8 @@ final class MaximizerKernelTests: XCTestCase {
         XCTAssertEqual(MaximizerGraphScale.points(shifted, firstIndex: 5, merge: 4), 
                        Array(MaximizerGraphScale.points(complete, merge: 4).suffix(1)))
         XCTAssertEqual(MaximizerGraphScale.points(columns, merge: 1).count, 10)
-        XCTAssertEqual(MaximizerGraphScale.depth(-15), 0.5)
-        XCTAssertEqual(MaximizerGraphScale.height(3), 0.1, accuracy: 1e-6)
+        XCTAssertEqual(MaximizerGraphScale.depth(-12), 0.5)
+        XCTAssertEqual(MaximizerGraphScale.height(3), 0.125, accuracy: 1e-6)
     }
 
     func testRendersMuchFasterThanRealTime() {

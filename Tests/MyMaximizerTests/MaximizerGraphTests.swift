@@ -8,7 +8,7 @@ import XCTest
 final class MaximizerGraphTests: XCTestCase {
     private func pixels(_ columns: [MaximizerColumn], merge: Int) throws -> (data: [UInt8], width: Int, height: Int) {
         let graph = MaximizerGraph(columns: columns, firstIndex: 0, merge: merge, ceiling: -0.1, threshold: -6)
-            .frame(width: CGFloat(MaximizerHistory.viewColumns), height: 120)
+            .frame(width: MaximizerHistory.viewWidth, height: 120)
             .environment(\.displayScale, 2)
         let renderer = ImageRenderer(content: graph)
         renderer.scale = 2
@@ -35,11 +35,11 @@ final class MaximizerGraphTests: XCTestCase {
             let before = try pixels(Array(columns[..<count]), merge: merge)
             // An odd number of columns: the old grouping would have shifted.
             let after = try pixels(Array(columns[..<(count + merge + 1)]), merge: merge)
-            // Complete new points, one point (2 px at scale 2) each.
-            let shift = 2 * ((count + merge + 1) / merge - count / merge)
+            // Complete new points, one pixel each at scale 2.
+            let shift = (count + merge + 1) / merge - count / merge
             var differences = 0
             // Leave out the scale labels (left) and the dotted lines (top, THRESH at -6 dB).
-            for y in 30..<230 where !(44...54).contains(y) {
+            for y in 30..<230 where !(55...65).contains(y) {
                 for x in 60..<(before.width - shift) {
                     for channel in 0..<4 {
                         let old = before.data[(y * before.width + x + shift) * 4 + channel]
