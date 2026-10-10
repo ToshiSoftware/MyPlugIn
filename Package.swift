@@ -16,6 +16,7 @@ let plugIns = [
     "MyDelay",
     "MyChannelStrip",
     "MyMaximizer",
+    "MyChorusPan",
     // new-plugin.sh: plug-ins
 ]
 

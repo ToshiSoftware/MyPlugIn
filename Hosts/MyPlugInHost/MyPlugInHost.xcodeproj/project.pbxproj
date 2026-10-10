@@ -6,6 +6,11 @@
 	};
 	objectVersion = 60;
 	objects = {
+		0005C8553F793864E7593A25 /* MyChorusPan */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE90A8E604A7C840E88D03A;
+			productName = MyChorusPan;
+		};
 		011973EC3BD0E64DD8207791 /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8ECF86D450EEB35D70F0077B; };
 		03017EC07352B241C3BF9DFC /* MyPlugInCore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -30,7 +35,9 @@
 			path = HostApp;
 			sourceTree = "<group>";
 		};
+		08A266D529986701F8918289 /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE75FE1962F3F8EA4F10FFD; };
 		0A52C714EDBF28D77D0B6AFB /* MyReverb in Frameworks */ = {isa = PBXBuildFile; productRef = F4A00A737AD874278D0FB8DF; };
+		0BA31EF9946A9554CA63D844 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
 		0F68EAA148DADD5397163CB9 /* MyMaximizerExtension Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -57,6 +64,7 @@
 				BB0EC5A8BA0BB6F3F441781A,
 				38F2644EDD9956A7D1EDA0B9,
 				966D6CC6D3CB71626E6E8BAC,
+				E48655A2E65CD0259AE6BF19,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,6 +113,7 @@
 				BAF9131270C4FC25C32E3E63,
 				474188EBA5200E0D24721220,
 				D24CF60DD9F84DCC2B9DF8FA,
+				FAD47953BD0A7DCD28DAD20D,
 			);
 		};
 		474188EBA5200E0D24721220 /* MyChannelStripExtension */ = {
@@ -159,6 +168,7 @@
 				9F2957D6AE68E6D49856178D,
 				601BE1CC4203AD4F3D3717C4,
 				322E7484ABDF5EC42BFC9662,
+				C7A05E28E41580BEB2018FF1,
 			);
 			name = MyPlugIn;
 			packageProductDependencies = (
@@ -177,6 +187,11 @@
 				2AC8BA37DAC32D5437812408,
 			);
 			sourceTree = "<group>";
+		};
+		4EE75FE1962F3F8EA4F10FFD /* MyPlugInCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE90A8E604A7C840E88D03A;
+			productName = MyPlugInCore;
 		};
 		50F935F87C3319151963C21D /* MyChannelStrip */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -202,6 +217,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		5B08E8D90659CBF2E761C855 /* MyChorusPanExtension Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3D1F608E81B8B8CA5838914,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5B5114795193A223DD350E58 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -213,6 +236,7 @@
 				8EA70F78F0178219496DCE94,
 				665F649C39EAEF1898011898,
 				320C7ED9AD5DA438EFAF5A7D,
+				F674F5AC2A98DFEA48350D63,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +337,7 @@
 			name = Debug;
 		};
 		830676AC7A75D04617FF52C0 /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = E6A5EC5B76911C9C9CBEF08B; };
+		85EB5BCE370EA7516DB991AE /* MyChorusPanExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyChorusPanExtension.swift"; sourceTree = "<group>"; };
 		8D852095880486B9222FF294 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -482,6 +507,37 @@
 			};
 			name = Release;
 		};
+		C7A05E28E41580BEB2018FF1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAD47953BD0A7DCD28DAD20D;
+			targetProxy = D0CE6D1F9860FD1D859D2A24;
+		};
+		C8F14294D4299F2234F71721 /* MyChorusPanExtension Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08A266D529986701F8918289,
+				F964C1E815ABBE5EB9272603,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C96197A75F68AE4E926514BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = "Extensions/MyChorusPan/Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyPlugIn.MyChorusPan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		C9680DFA9968EC82BEFA1F55 /* MyDelayExtension Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -526,6 +582,13 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		D0CE6D1F9860FD1D859D2A24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			proxyType = 1;
+			remoteGlobalIDString = FAD47953BD0A7DCD28DAD20D;
+			remoteInfo = MyChorusPanExtension;
+		};
 		D24CF60DD9F84DCC2B9DF8FA /* MyMaximizerExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53189AE33A7DF65767A2EC13;
@@ -553,6 +616,7 @@
 			remoteGlobalIDString = BAF9131270C4FC25C32E3E63;
 			remoteInfo = MyDelayExtension;
 		};
+		D3D1F608E81B8B8CA5838914 /* MyChorusPanExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EB5BCE370EA7516DB991AE; };
 		D48F58F8CA231B2301441318 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -584,6 +648,23 @@
 			};
 			name = Debug;
 		};
+		D90B6B9B89BD1C57C6E71251 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = "Extensions/MyChorusPan/Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyPlugIn.MyChorusPan;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
 		D97695167684BF15417B212D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C04C9773AB9752BE6200277E;
@@ -606,6 +687,15 @@
 			};
 			name = Debug;
 		};
+		DD196E2BC868A622406CA702 /* MyChorusPan */ = {
+			isa = PBXGroup;
+			children = (
+				85EB5BCE370EA7516DB991AE,
+				0BA31EF9946A9554CA63D844,
+			);
+			path = MyChorusPan;
+			sourceTree = "<group>";
+		};
 		E02AD90A2A189B482124E381 /* MyReverbExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494B19F87E5706E399170CBF; };
 		E2E4BB3135EECC4D5A1DED4E /* Extensions */ = {
 			isa = PBXGroup;
@@ -615,10 +705,12 @@
 				9FBF67B1576F97CA7D046A75,
 				709AD7FA2468A2E86A3A639A,
 				0565C756B6AA2804461A2B50,
+				DD196E2BC868A622406CA702,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		E48655A2E65CD0259AE6BF19 /* MyChorusPanExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyChorusPanExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6A5EC5B76911C9C9CBEF08B /* MyPlugInCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EFE90A8E604A7C840E88D03A;
@@ -645,11 +737,21 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../..;
 		};
+		F0DBF012B4E026152782C050 /* Build configuration list for MyChorusPanExtension */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D90B6B9B89BD1C57C6E71251,
+				C96197A75F68AE4E926514BA,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F4A00A737AD874278D0FB8DF /* MyReverb */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EFE90A8E604A7C840E88D03A;
 			productName = MyReverb;
 		};
+		F674F5AC2A98DFEA48350D63 /* MyChorusPanExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E48655A2E65CD0259AE6BF19; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F6D2CF4D45887CF75A10DAE8 /* Build configuration list for MyDelayExtension */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -660,6 +762,27 @@
 			defaultConfigurationName = Release;
 		};
 		F6D67B4A8CF10A29E6C11445 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
+		F964C1E815ABBE5EB9272603 /* MyChorusPan in Frameworks */ = {isa = PBXBuildFile; productRef = 0005C8553F793864E7593A25; };
+		FAD47953BD0A7DCD28DAD20D /* MyChorusPanExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0DBF012B4E026152782C050;
+			buildPhases = (
+				5B08E8D90659CBF2E761C855,
+				C8F14294D4299F2234F71721,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyChorusPanExtension;
+			packageProductDependencies = (
+				4EE75FE1962F3F8EA4F10FFD,
+				0005C8553F793864E7593A25,
+			);
+			productName = MyChorusPanExtension;
+			productReference = E48655A2E65CD0259AE6BF19;
+			productType = "com.apple.product-type.app-extension";
+		};
 		FAE38136A79297D35B8435E4 /* MyMaximizerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48FB5BC1EB30799780B1081; };
 		FBEEBAF886D87A30C6DA0651 /* Debug */ = {
 			isa = XCBuildConfiguration;

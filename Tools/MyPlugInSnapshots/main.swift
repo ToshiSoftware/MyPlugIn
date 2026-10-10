@@ -58,7 +58,8 @@ let manualSetups: [String: (channel: String, values: [String: Float])] = [
         "band4_gain": 2,
         "comp_on": 1, "comp_threshold": -20, "comp_ratio": 3
     ]),
-    "MyMaximizer": ("MASTER", ["input_gain": 6, "threshold": -3])
+    "MyMaximizer": ("MASTER", ["input_gain": 6, "threshold": -3]),
+    "MyChorusPan": ("Guitar", [:])
 ]
 try FileManager.default.createDirectory(at: outputFolder, withIntermediateDirectories: true)
 let application = NSApplication.shared
