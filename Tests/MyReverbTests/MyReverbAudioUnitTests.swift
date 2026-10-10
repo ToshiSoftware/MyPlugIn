@@ -160,7 +160,7 @@ final class MyReverbAudioUnitTests: XCTestCase {
     func testDefaultsAndDisplay() throws {
         let unit = try makeUnit()
         let tree = try XCTUnwrap(unit.parameterTree)
-        XCTAssertEqual(tree.allParameters.map(\.identifier), ["hpf", "lpf", "rt", "preDelay", "mix"])
+        XCTAssertEqual(tree.allParameters.map(\.identifier), ["hpf", "lpf", "rt", "preDelay", "mix", "width"])
         let hpf = try XCTUnwrap(tree.parameter(withAddress: AUParameterAddress(ReverbParameter.hpf.rawValue)))
         XCTAssertEqual(hpf.value, 80)
         XCTAssertEqual(hpf.string(fromValue: nil), "80 Hz")

@@ -5,7 +5,7 @@ as AUv3 extensions for other hosts (Logic, ...).
 
 | Effect | Subtype | Notes |
 |---|---|---|
-| MyReverb | `MRev` | Plate reverb: HPF, LPF, RT, PD, MIX ([Docs/MyReverb.md](Docs/MyReverb.md)) |
+| MyReverb | `MRev` | Plate reverb: HPF, LPF, RT, PD, WIDTH, MIX ([Docs/MyReverb.md](Docs/MyReverb.md)) |
 | MyDelay | `MDly` | Mono / Stereo / Doubler / Ping-Pong delay ([Docs/MyDelay.md](Docs/MyDelay.md)) |
 | MyChannelStrip | `MStp` | 4-band EQ with spectrum, compressor, output gain ([Docs/MyChannelStrip.md](Docs/MyChannelStrip.md)) |
 | MyMaximizer | `MMax` | Mastering limiter: input gain, upward compression, look-ahead ceiling with attack/release (10 ms latency), history graph ([Docs/MyMaximizer.md](Docs/MyMaximizer.md)) |

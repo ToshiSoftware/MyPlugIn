@@ -163,6 +163,97 @@ final class ReverbKernelTests: XCTestCase {
         XCTAssertNotEqual(left, right)
     }
 
+    /// A hard-left source stays on the left for the first 70 ms, as on
+    /// the LX480 plate (+28 dB for 20 ms, then +9 dB); the old taps fed every line to
+    /// both sides, so the track's pan made almost no difference.
+    func testPannedSourceStaysOnItsSide() {
+        let kernel = makeKernel(wetOnly)
+        let input = impulse(seconds: 1)
+        let (left, right) = render(kernel, left: input, right: [Float](repeating: 0, count: input.count))
+        func ratioDecibels(_ range: Range<Int>) -> Double {
+            20 * log10(rms(left[range]) / rms(right[range]))
+        }
+        XCTAssertGreaterThan(ratioDecibels(0..<1_000), 20)
+        XCTAssertGreaterThan(ratioDecibels(1_000..<3_400), 8)
+        XCTAssertLessThan(abs(ratioDecibels(9_600..<48_000)), 4)
+    }
+
+    /// A centred source comes out equally loud on both sides (also in a
+    /// long tail), slightly anti-phase in the low end, uncorrelated above.
+    func testStereoImageIsBalancedWithAntiPhaseLowEnd() {
+        // Fixed, long noise: low-band correlation of 4 s of random noise
+        // varied from -0.1 to +0.01 between runs (a flaky test).
+        let kernel = makeKernel(wetOnly)
+        var seed: UInt32 = 12_345
+        let input = (0..<(12 * 48_000)).map { _ -> Float in
+            seed = seed &* 1_664_525 &+ 1_013_904_223
+            return Float(Int32(bitPattern: seed)) / Float(Int32.max) * 0.5
+        }
+        let (left, right) = render(kernel, left: input)
+        let steady = 48_000..<input.count
+        XCTAssertEqual(20 * log10(rms(left[steady]) / rms(right[steady])), 0, accuracy: 0.5)
+        func correlation(below cutoff: Double?) -> Double {
+            // Low band: two one-pole low-passes; high band: the rest.
+            let k = cutoff.map { Float(1 - exp(-2 * Double.pi * $0 / 48_000)) }
+            var l1: Float = 0, l2: Float = 0, r1: Float = 0, r2: Float = 0
+            var product = 0.0, energyLeft = 0.0, energyRight = 0.0
+            for index in 0..<left.count {
+                var a = left[index], b = right[index]
+                l1 += (k ?? 0) * (a - l1); l2 += (k ?? 0) * (l1 - l2)
+                r1 += (k ?? 0) * (b - r1); r2 += (k ?? 0) * (r1 - r2)
+                if k != nil { a = l2; b = r2 }
+                if steady.contains(index) {
+                    product += Double(a * b); energyLeft += Double(a * a); energyRight += Double(b * b)
+                }
+            }
+            return product / (energyLeft * energyRight).squareRoot()
+        }
+        XCTAssertLessThan(correlation(below: 150), -0.03) // -0.09 with this noise
+        XCTAssertEqual(correlation(below: nil), 0, accuracy: 0.1)
+    }
+
+    /// WIDTH scales the wet side signal: 0 % mono, 100 % uncorrelated.
+    func testWidthScalesTheSideSignal() {
+        func correlation(width: Float) -> Double {
+            var values = wetOnly
+            values[.width] = width
+            let kernel = makeKernel(values)
+            let (left, right) = render(kernel, left: noise(seconds: 3))
+            var product = 0.0
+            for index in 48_000..<144_000 { product += Double(left[index] * right[index]) }
+            return product / (rms(left[48_000..<144_000]) * rms(right[48_000..<144_000]) * 96_000)
+        }
+        XCTAssertGreaterThan(correlation(width: 0), 0.99)
+        XCTAssertEqual(correlation(width: 50), 0.6, accuracy: 0.15) // (1 - 0.25) / (1 + 0.25)
+        XCTAssertEqual(correlation(width: 100), 0, accuracy: 0.15)
+    }
+
+    func testWidthChangesDoNotClick() {
+        let kernel = makeKernel(wetOnly)
+        let input = sine(440, seconds: 2)
+        let (left, _) = render(kernel, left: input) { block in
+            if block == 90 { kernel.setTarget(.width, 0) }
+            if block == 140 { kernel.setTarget(.width, 100) }
+        }
+        var largestStep: Float = 0
+        for index in 48_000..<(left.count - 1) { largestStep = max(largestStep, abs(left[index + 1] - left[index])) }
+        var typicalStep: Float = 0
+        for index in 24_000..<44_000 { typicalStep = max(typicalStep, abs(left[index + 1] - left[index])) }
+        XCTAssertLessThan(largestStep, typicalStep * 3)
+    }
+
+    /// The left bias once kept long tails 2 dB to the left all the way.
+    func testLongTailStaysCentred() {
+        var values = wetOnly
+        values[.rt] = 10
+        let kernel = makeKernel(values)
+        let input = impulse(seconds: 4)
+        let (left, right) = render(kernel, left: input)
+        for range in [4_800..<48_000, 48_000..<96_000, 96_000..<192_000] {
+            XCTAssertEqual(20 * log10(rms(left[range]) / rms(right[range])), 0, accuracy: 0.75, "\(range)")
+        }
+    }
+
     // MARK: Mix, pre-delay, reset, bypass
 
     func testMixZeroPassesDryUnchanged() {
