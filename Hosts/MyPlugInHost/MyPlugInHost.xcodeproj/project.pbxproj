@@ -65,10 +65,12 @@
 				38F2644EDD9956A7D1EDA0B9,
 				966D6CC6D3CB71626E6E8BAC,
 				E48655A2E65CD0259AE6BF19,
+				60B6137DA22FDB76A5683F34,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2F321BC1C4FD590FE3B63704 /* MyTunerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 60B6137DA22FDB76A5683F34; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		320C7ED9AD5DA438EFAF5A7D /* MyMaximizerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 966D6CC6D3CB71626E6E8BAC; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		322E7484ABDF5EC42BFC9662 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -114,6 +116,7 @@
 				474188EBA5200E0D24721220,
 				D24CF60DD9F84DCC2B9DF8FA,
 				FAD47953BD0A7DCD28DAD20D,
+				64D5EE292CF9BB61871C3D20,
 			);
 		};
 		474188EBA5200E0D24721220 /* MyChannelStripExtension */ = {
@@ -153,6 +156,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4AD08DC0E2C27A433F64F876 /* MyTuner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE90A8E604A7C840E88D03A;
+			productName = MyTuner;
+		};
 		4CDDD75AF45B55C4A02D57C0 /* MyPlugIn */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CF7975C3E9E26F9456316D50;
@@ -169,6 +177,7 @@
 				601BE1CC4203AD4F3D3717C4,
 				322E7484ABDF5EC42BFC9662,
 				C7A05E28E41580BEB2018FF1,
+				90DC0435BD51FDCEA0766D71,
 			);
 			name = MyPlugIn;
 			packageProductDependencies = (
@@ -179,6 +188,7 @@
 			productReference = 687870ECB8739D56D9CD3075;
 			productType = "com.apple.product-type.application";
 		};
+		4D1427AAA533F64255ECB237 /* MyTunerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FAAE6C4FCFDB1A45E28E56; };
 		4EAE695AD1F489F78EA3E1C6 /* main */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,6 +247,17 @@
 				665F649C39EAEF1898011898,
 				320C7ED9AD5DA438EFAF5A7D,
 				F674F5AC2A98DFEA48350D63,
+				2F321BC1C4FD590FE3B63704,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CA8B1DD6EB376260DE2FB2D /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = A3B35115270E4B373F6D7A7C; };
+		5EA19CCEE64874A09A923B17 /* MyTunerExtension Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5CA8B1DD6EB376260DE2FB2D,
+				B8BAE31F6E8DFE12E28E7240,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,7 +266,28 @@
 			target = 474188EBA5200E0D24721220;
 			targetProxy = A5438D8A564575623A5FE531;
 		};
+		60B6137DA22FDB76A5683F34 /* MyTunerExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyTunerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		642FA292EF5E5FB38F8E00FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
+		64D5EE292CF9BB61871C3D20 /* MyTunerExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EBA59DA328686BD3D4145FFF;
+			buildPhases = (
+				C8B3F54C28E2BA8ED5938AC1,
+				5EA19CCEE64874A09A923B17,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyTunerExtension;
+			packageProductDependencies = (
+				A3B35115270E4B373F6D7A7C,
+				4AD08DC0E2C27A433F64F876,
+			);
+			productName = MyTunerExtension;
+			productReference = 60B6137DA22FDB76A5683F34;
+			productType = "com.apple.product-type.app-extension";
+		};
 		66281B597163EE48E64A0C29 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -280,6 +322,23 @@
 			);
 			path = MyChannelStrip;
 			sourceTree = "<group>";
+		};
+		72C344EFDB25BB60662E3EDF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = "Extensions/MyTuner/Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyPlugIn.MyTuner;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
 		};
 		733ED554CEBF279AFFADEADA /* MyReverbExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A26654BBAA94EFEBC22343B; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		753417E43052341AAF61963B /* Debug */ = {
@@ -367,6 +426,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		90DC0435BD51FDCEA0766D71 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 64D5EE292CF9BB61871C3D20;
+			targetProxy = D404AF6BD92259B4C1B3E7A2;
+		};
 		910E26F5C44462E490E91133 /* MyDelayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D658DA8BF7FC88C9543486E; };
 		91975E80FC675635706F3BE2 /* MyDelayExtension Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -408,6 +472,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		A3B35115270E4B373F6D7A7C /* MyPlugInCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE90A8E604A7C840E88D03A;
+			productName = MyPlugInCore;
+		};
 		A5438D8A564575623A5FE531 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 46F86FAA6BBF9AC94A7E4595;
@@ -416,6 +485,23 @@
 			remoteInfo = MyChannelStripExtension;
 		};
 		A5C082C286FAD3415EC7EFF6 /* MyDelay in Frameworks */ = {isa = PBXBuildFile; productRef = BD1EBA95CC54674F0ADF05F3; };
+		AFECF41D43FBC91423C1FAE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = "Extensions/MyTuner/Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyPlugIn.MyTuner;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		B692564681FDF41F2DBB7CCD /* MyPlugInCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 26DC57C00E2C8903D9C9543B; };
 		B81DD771EFCDBF71A939F845 /* MyReverbExtension Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -425,6 +511,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B8BAE31F6E8DFE12E28E7240 /* MyTuner in Frameworks */ = {isa = PBXBuildFile; productRef = 4AD08DC0E2C27A433F64F876; };
 		BAF9131270C4FC25C32E3E63 /* MyDelayExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F6D2CF4D45887CF75A10DAE8;
@@ -512,6 +599,15 @@
 			target = FAD47953BD0A7DCD28DAD20D;
 			targetProxy = D0CE6D1F9860FD1D859D2A24;
 		};
+		C8B3F54C28E2BA8ED5938AC1 /* MyTunerExtension Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D1427AAA533F64255ECB237,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8E7C4A644347969BADB0F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
 		C8F14294D4299F2234F71721 /* MyChorusPanExtension Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -617,6 +713,13 @@
 			remoteInfo = MyDelayExtension;
 		};
 		D3D1F608E81B8B8CA5838914 /* MyChorusPanExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EB5BCE370EA7516DB991AE; };
+		D404AF6BD92259B4C1B3E7A2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			proxyType = 1;
+			remoteGlobalIDString = 64D5EE292CF9BB61871C3D20;
+			remoteInfo = MyTunerExtension;
+		};
 		D48F58F8CA231B2301441318 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -697,6 +800,15 @@
 			sourceTree = "<group>";
 		};
 		E02AD90A2A189B482124E381 /* MyReverbExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494B19F87E5706E399170CBF; };
+		E27227B92167CAC911CEFDC2 /* MyTuner */ = {
+			isa = PBXGroup;
+			children = (
+				F2FAAE6C4FCFDB1A45E28E56,
+				C8E7C4A644347969BADB0F8E,
+			);
+			path = MyTuner;
+			sourceTree = "<group>";
+		};
 		E2E4BB3135EECC4D5A1DED4E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -706,6 +818,7 @@
 				709AD7FA2468A2E86A3A639A,
 				0565C756B6AA2804461A2B50,
 				DD196E2BC868A622406CA702,
+				E27227B92167CAC911CEFDC2,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -733,6 +846,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EBA59DA328686BD3D4145FFF /* Build configuration list for MyTunerExtension */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				72C344EFDB25BB60662E3EDF,
+				AFECF41D43FBC91423C1FAE1,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EFE90A8E604A7C840E88D03A /* XCLocalSwiftPackageReference "../.." */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../..;
@@ -746,6 +868,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F2FAAE6C4FCFDB1A45E28E56 /* MyTunerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyTunerExtension.swift"; sourceTree = "<group>"; };
 		F4A00A737AD874278D0FB8DF /* MyReverb */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EFE90A8E604A7C840E88D03A;

@@ -10,6 +10,7 @@ as AUv3 extensions for other hosts (Logic, ...).
 | MyChannelStrip | `MStp` | 4-band EQ with spectrum, compressor, output gain ([Docs/MyChannelStrip.md](Docs/MyChannelStrip.md)) |
 | MyMaximizer | `MMax` | Mastering limiter: input gain, upward compression, look-ahead ceiling with attack/release (10 ms latency), history graph ([Docs/MyMaximizer.md](Docs/MyMaximizer.md)) |
 | MyChorusPan | `MChP` | Modulation in four modes, each with its own settings and an INIT button for the recommended ones: Chorus Pedal, Dimension (buttons 1 to 4), Flanger Pedal, Auto Pan; SPEED lamp ([Docs/MyChorusPan.md](Docs/MyChorusPan.md)) |
+| MyTuner | `MTun` | Chromatic / guitar tuner with a needle or strobe display and calibration (430–450 Hz); passes the sound through. MyDAW opens it from the transport bar, not as an insert ([Docs/MyTuner.md](Docs/MyTuner.md)) |
 
 In MyDAW they are "MyDAW: MyReverb" etc. (`aufx` subtype `MyDA`); in other
 hosts "Toka: MyReverb" etc. (`aufx` subtype `Toka`). Subtypes, parameter

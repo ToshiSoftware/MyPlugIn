@@ -36,6 +36,33 @@ func fillHistory(_ kernel: MaximizerKernel, drive: Float?) {
     kernel.setTarget(.inputGain, inputGain)
 }
 #endif
+#if canImport(MyTuner)
+import MyTuner
+
+/// Half a second of A2 6 cents flat with guitar-like harmonics, so the
+/// tuner shows a reading (the editor detects it on its first frame).
+func fillTuner(_ kernel: TunerKernel) {
+    let rate = 48_000.0
+    kernel.prepare(sampleRate: rate, maximumFrames: 512)
+    kernel.isAnalyzing = true
+    let frequency = 110 * pow(2, -6.0 / 1_200)
+    let frames = Int(0.5 * rate)
+    let signal: [Float] = (0..<frames).map { frame in
+        let time = Double(frame) / rate
+        return Float((1...6).reduce(0.0) { $0 + 0.3 / Double($1) * sin(2 * .pi * frequency * Double($1) * time) })
+    }
+    var output = signal
+    signal.withUnsafeBufferPointer { input in
+        output.withUnsafeMutableBufferPointer { out in
+            for start in stride(from: 0, to: frames, by: 512) {
+                let count = min(512, frames - start)
+                kernel.process(inputLeft: input.baseAddress! + start, inputRight: input.baseAddress! + start,
+                               outputLeft: out.baseAddress! + start, outputRight: nil, frameCount: count)
+            }
+        }
+    }
+}
+#endif
 
 // Writes each effect's editor to <output folder>/<Name>.png, with sample
 // meter levels, to check the look without a host:
@@ -59,7 +86,8 @@ let manualSetups: [String: (channel: String, values: [String: Float])] = [
         "comp_on": 1, "comp_threshold": -20, "comp_ratio": 3
     ]),
     "MyMaximizer": ("MASTER", ["input_gain": 6, "threshold": -3]),
-    "MyChorusPan": ("Guitar", [:])
+    "MyChorusPan": ("Guitar", [:]),
+    "MyTuner": ("", [:])
 ]
 try FileManager.default.createDirectory(at: outputFolder, withIntermediateDirectories: true)
 let application = NSApplication.shared
@@ -77,6 +105,11 @@ for plugIn in MyPlugInCatalog.plugIns {
     #if canImport(MyMaximizer)
     if let maximizer = unit as? MyMaximizerAudioUnit {
         fillHistory(maximizer.maximizerKernel, drive: forManual ? nil : 8)
+    }
+    #endif
+    #if canImport(MyTuner)
+    if let tuner = unit as? MyTunerAudioUnit {
+        fillTuner(tuner.tunerKernel)
     }
     #endif
     let controller = unit.makeEditorViewController()
