@@ -63,6 +63,39 @@ func fillTuner(_ kernel: TunerKernel) {
     }
 }
 #endif
+#if canImport(MyDeEsser)
+import MyDeEsser
+
+/// A vocal-like tone with an "s" burst, rendered while the editor polls,
+/// so the SIB / GR meters and the band graph show a consonant being cut.
+func runSibilance(_ kernel: DeEsserKernel) {
+    let rate = 48_000.0
+    kernel.prepare(sampleRate: rate, maximumFrames: 512)
+    var state: UInt32 = 3
+    var frame = 0
+    for _ in 0..<12 {
+        let count = Int(rate / 30)
+        let signal: [Float] = (0..<count).map { _ in
+            defer { frame += 1 }
+            state = state &* 1_664_525 &+ 1_013_904_223
+            let noise = Float(Int32(bitPattern: state)) / Float(Int32.max)
+            let time = Double(frame) / rate
+            return Float(0.25 * sin(2 * .pi * 220 * time)) + 0.3 * noise
+        }
+        var output = signal
+        signal.withUnsafeBufferPointer { input in
+            output.withUnsafeMutableBufferPointer { out in
+                for start in stride(from: 0, to: count, by: 512) {
+                    kernel.process(inputLeft: input.baseAddress! + start, inputRight: input.baseAddress! + start,
+                                   outputLeft: out.baseAddress! + start, outputRight: nil,
+                                   frameCount: min(512, count - start))
+                }
+            }
+        }
+        RunLoop.main.run(until: Date().addingTimeInterval(1.0 / 30))
+    }
+}
+#endif
 
 // Writes each effect's editor to <output folder>/<Name>.png, with sample
 // meter levels, to check the look without a host:
@@ -87,7 +120,8 @@ let manualSetups: [String: (channel: String, values: [String: Float])] = [
     ]),
     "MyMaximizer": ("MASTER", ["input_gain": 6, "threshold": -3]),
     "MyChorusPan": ("Guitar", [:]),
-    "MyTuner": ("", [:])
+    "MyTuner": ("", [:]),
+    "MyDeEsser": ("Vocal", ["threshold": -13])
 ]
 try FileManager.default.createDirectory(at: outputFolder, withIntermediateDirectories: true)
 let application = NSApplication.shared
@@ -127,6 +161,12 @@ for plugIn in MyPlugInCatalog.plugIns {
     let window = NSWindow(contentViewController: controller)
     window.setContentSize(controller.size)
     RunLoop.main.run(until: Date().addingTimeInterval(0.3))
+    // Last, so the meters have not fallen back before the picture.
+    #if canImport(MyDeEsser)
+    if let deEsser = unit as? MyDeEsserAudioUnit {
+        runSibilance(deEsser.deEsserKernel)
+    }
+    #endif
     let view = controller.view
     guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { continue }
     view.cacheDisplay(in: view.bounds, to: bitmap)

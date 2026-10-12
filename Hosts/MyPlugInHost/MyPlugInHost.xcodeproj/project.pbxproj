@@ -36,6 +36,12 @@
 			sourceTree = "<group>";
 		};
 		08A266D529986701F8918289 /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE75FE1962F3F8EA4F10FFD; };
+		0948A02AF834D143C388DF05 /* MyDeEsserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E0A9C9B31EDACA36B83940; };
+		0952E07E9BEDD19B4C8B4610 /* MyPlugInCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE90A8E604A7C840E88D03A;
+			productName = MyPlugInCore;
+		};
 		0A52C714EDBF28D77D0B6AFB /* MyReverb in Frameworks */ = {isa = PBXBuildFile; productRef = F4A00A737AD874278D0FB8DF; };
 		0BA31EF9946A9554CA63D844 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
 		0F68EAA148DADD5397163CB9 /* MyMaximizerExtension Frameworks */ = {
@@ -46,6 +52,11 @@
 				1D589BCE2FC897084B0723C1,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1233D275E6061FA3F1A67622 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B4DFEBBC746C5DAECB4ED91B;
+			targetProxy = E22BC4616C117D499372AF7A;
 		};
 		1728D1CD58E24B3084BD7FD5 /* MyChannelStripExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyChannelStripExtension.swift"; sourceTree = "<group>"; };
 		18224AF4112E49BF46807C55 /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = 03017EC07352B241C3BF9DFC; };
@@ -66,6 +77,7 @@
 				966D6CC6D3CB71626E6E8BAC,
 				E48655A2E65CD0259AE6BF19,
 				60B6137DA22FDB76A5683F34,
+				8C111C12058A0F6F23196F80,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,6 +90,32 @@
 			targetProxy = 3F17C14C4957612D7AEFED25;
 		};
 		38F2644EDD9956A7D1EDA0B9 /* MyChannelStripExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyChannelStripExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B254D0976881176D2A57E79 /* MyDeEsserExtension Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54F642F5CE286C27BBF49A73,
+				A81A558A4E0BA921889AD0D8,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C50418A54CE0C1982EF3E49 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = "Extensions/MyDeEsser/Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyPlugIn.MyDeEsser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
 		3C6B68257C2526EE47417CEF /* MyPlugInCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EFE90A8E604A7C840E88D03A;
@@ -117,6 +155,7 @@
 				D24CF60DD9F84DCC2B9DF8FA,
 				FAD47953BD0A7DCD28DAD20D,
 				64D5EE292CF9BB61871C3D20,
+				B4DFEBBC746C5DAECB4ED91B,
 			);
 		};
 		474188EBA5200E0D24721220 /* MyChannelStripExtension */ = {
@@ -161,6 +200,15 @@
 			package = EFE90A8E604A7C840E88D03A;
 			productName = MyTuner;
 		};
+		4B448B09AF83737854F84ED9 /* MyDeEsser */ = {
+			isa = PBXGroup;
+			children = (
+				91E0A9C9B31EDACA36B83940,
+				855CA284779D93212C79C14A,
+			);
+			path = MyDeEsser;
+			sourceTree = "<group>";
+		};
 		4CDDD75AF45B55C4A02D57C0 /* MyPlugIn */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CF7975C3E9E26F9456316D50;
@@ -178,6 +226,7 @@
 				322E7484ABDF5EC42BFC9662,
 				C7A05E28E41580BEB2018FF1,
 				90DC0435BD51FDCEA0766D71,
+				1233D275E6061FA3F1A67622,
 			);
 			name = MyPlugIn;
 			packageProductDependencies = (
@@ -218,6 +267,7 @@
 			defaultConfigurationName = Release;
 		};
 		538D794F2F8DE1340CE1120E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
+		54F642F5CE286C27BBF49A73 /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0952E07E9BEDD19B4C8B4610; };
 		5A6F0CB31060DFD1EAB054B1 /* Build configuration list for MyReverbExtension */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -248,10 +298,12 @@
 				320C7ED9AD5DA438EFAF5A7D,
 				F674F5AC2A98DFEA48350D63,
 				2F321BC1C4FD590FE3B63704,
+				5E8DDCC0961F6300D1AA97C1,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5CA8B1DD6EB376260DE2FB2D /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = A3B35115270E4B373F6D7A7C; };
+		5E8DDCC0961F6300D1AA97C1 /* MyDeEsserExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8C111C12058A0F6F23196F80; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5EA19CCEE64874A09A923B17 /* MyTunerExtension Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -396,7 +448,18 @@
 			name = Debug;
 		};
 		830676AC7A75D04617FF52C0 /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = E6A5EC5B76911C9C9CBEF08B; };
+		855CA284779D93212C79C14A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
 		85EB5BCE370EA7516DB991AE /* MyChorusPanExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyChorusPanExtension.swift"; sourceTree = "<group>"; };
+		870F1CA8C701A9A77C8077F0 /* Build configuration list for MyDeEsserExtension */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C50418A54CE0C1982EF3E49,
+				A07BC037FBA96D2B61FEC53D,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C111C12058A0F6F23196F80 /* MyDeEsserExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyDeEsserExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D852095880486B9222FF294 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -441,7 +504,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		91E0A9C9B31EDACA36B83940 /* MyDeEsserExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyDeEsserExtension.swift"; sourceTree = "<group>"; };
 		966D6CC6D3CB71626E6E8BAC /* MyMaximizerExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyMaximizerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		98505BC664B74CA6D56EDFEA /* MyDeEsserExtension Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0948A02AF834D143C388DF05,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		98A1792724A1EDFF43A5D1FE /* MyChannelStrip in Frameworks */ = {isa = PBXBuildFile; productRef = 50F935F87C3319151963C21D; };
 		98A25E8996DB261EF5E8957D /* MyPlugInCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3C6B68257C2526EE47417CEF; };
 		9E5A18506D19AF00549E444C /* MyPlugInCore */ = {
@@ -462,6 +534,23 @@
 			);
 			path = MyDelay;
 			sourceTree = "<group>";
+		};
+		A07BC037FBA96D2B61FEC53D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Extensions/Extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7LUU4H2M28;
+				INFOPLIST_FILE = "Extensions/MyDeEsser/Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tokada.MyPlugIn.MyDeEsser;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
 		};
 		A1806D8FE767B99D399E13F3 /* Build configuration list for project */ = {
 			isa = XCConfigurationList;
@@ -485,6 +574,7 @@
 			remoteInfo = MyChannelStripExtension;
 		};
 		A5C082C286FAD3415EC7EFF6 /* MyDelay in Frameworks */ = {isa = PBXBuildFile; productRef = BD1EBA95CC54674F0ADF05F3; };
+		A81A558A4E0BA921889AD0D8 /* MyDeEsser in Frameworks */ = {isa = PBXBuildFile; productRef = C5EE45E19F1C934603F060B3; };
 		AFECF41D43FBC91423C1FAE1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -501,6 +591,26 @@
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
+		};
+		B4DFEBBC746C5DAECB4ED91B /* MyDeEsserExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 870F1CA8C701A9A77C8077F0;
+			buildPhases = (
+				98505BC664B74CA6D56EDFEA,
+				3B254D0976881176D2A57E79,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyDeEsserExtension;
+			packageProductDependencies = (
+				0952E07E9BEDD19B4C8B4610,
+				C5EE45E19F1C934603F060B3,
+			);
+			productName = MyDeEsserExtension;
+			productReference = 8C111C12058A0F6F23196F80;
+			productType = "com.apple.product-type.app-extension";
 		};
 		B692564681FDF41F2DBB7CCD /* MyPlugInCatalog in Frameworks */ = {isa = PBXBuildFile; productRef = 26DC57C00E2C8903D9C9543B; };
 		B81DD771EFCDBF71A939F845 /* MyReverbExtension Sources */ = {
@@ -593,6 +703,11 @@
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
+		};
+		C5EE45E19F1C934603F060B3 /* MyDeEsser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFE90A8E604A7C840E88D03A;
+			productName = MyDeEsser;
 		};
 		C7A05E28E41580BEB2018FF1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -800,6 +915,13 @@
 			sourceTree = "<group>";
 		};
 		E02AD90A2A189B482124E381 /* MyReverbExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494B19F87E5706E399170CBF; };
+		E22BC4616C117D499372AF7A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			proxyType = 1;
+			remoteGlobalIDString = B4DFEBBC746C5DAECB4ED91B;
+			remoteInfo = MyDeEsserExtension;
+		};
 		E27227B92167CAC911CEFDC2 /* MyTuner */ = {
 			isa = PBXGroup;
 			children = (
@@ -819,6 +941,7 @@
 				0565C756B6AA2804461A2B50,
 				DD196E2BC868A622406CA702,
 				E27227B92167CAC911CEFDC2,
+				4B448B09AF83737854F84ED9,
 			);
 			path = Extensions;
 			sourceTree = "<group>";

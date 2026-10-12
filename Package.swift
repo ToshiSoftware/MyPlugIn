@@ -18,6 +18,7 @@ let plugIns = [
     "MyMaximizer",
     "MyChorusPan",
     "MyTuner",
+    "MyDeEsser",
     // new-plugin.sh: plug-ins
 ]
 
