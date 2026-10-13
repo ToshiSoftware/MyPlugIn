@@ -18,17 +18,31 @@ without it load at 100 %.
 
 ## Signal path
 
-Pre-delay (crossfades between delay times), two all-pass diffusers per side,
-an 8-line feedback delay network with a Hadamard matrix and an all-pass
-(gain 0.5) in each feedback path, so echo density rises with every
-reflection; then the stereo image stage (WIDTH), then 3rd-order Butterworth
-HPF and LPF on the wet signal, then mix.
+Pre-delay (crossfades between delay times), two all-pass diffusers per side
+(gains 0.45 and 0.375), an 8-line feedback delay network with a Hadamard
+matrix and an all-pass (gain 0.3) in each feedback path, so echo density
+rises with every reflection; then the stereo image stage (WIDTH), then
+3rd-order Butterworth HPF and LPF on the wet signal, then mix.
 
 - **Lines**: 31 to 97 ms, irregularly spaced primes, each with its own
   absorbent filter. RT is the time to fall 60 dB in the low and middle
   range (each line's feedback gain comes from its own length); the treble
-  decays in about 0.7 of that time, as on a plate. Long RTs are held to the
-  loudness of a 2 s tail. Fully linear: no limiting anywhere.
+  decays in about 0.85 of that time. Long RTs are held to the loudness of a
+  2 s tail. No limiting anywhere.
+- **Light diffusion**: the first 100 to 200 ms stay grainy, as on the LX480
+  plate, which keeps a low reverb level audible ("presence"). Echo density
+  (normalized, 1 = noise-like) at 50 / 100 / 200 ms: 0.43 / 0.66 / 0.96
+  (LX480 0.48 / 0.63 / 0.76; before 0.66 / 0.89 / 1.02).
+- **Fixed point**: the line memories and loop all-passes hold 18-bit words,
+  the absorbent and interpolation filters 22-bit products, all truncated
+  toward zero, as in 1980s hardware (the 480L is said to compute in 18
+  bits). Loud signals are unchanged; quiet tails fade out a little sooner.
+- **Denormals**: the tank's tail ends in exact zeros. The float stages after
+  it (stereo image, HPF, LPF) set states below 1e-20 to zero once per
+  32-sample chunk; otherwise they settle on the smallest denormal. The
+  output is exact zeros about 4 s after the input stops (RT 2 s).
+- **CPU**: the fixed point and flushing cost about 16 % more than the float
+  version (M2: 0.39 % to 0.45 % of one core at 48 kHz).
 - **Output taps**: each side also reads its lines part way along, so the
   tail peaks about 40 ms in. Each side taps only the lines its own input
   feeds, so a panned source stays on its side for the first 50 to 100 ms
@@ -56,7 +70,23 @@ a panned input:
 The wet level matches the LX480's, so the two can be compared at equal
 loudness.
 
+**Presence (2026-10-13).** The LX480 stays audible at a low reverb level.
+Measured against MyReverb at equal wet level:
+- The spectrum from 125 Hz to 4 kHz matched within 1 dB.
+- The differences were the sparse early tail, more treble in the tail, and
+  fixed-point traits. Relab's emulation shows constant quantization
+  distortion near -110 dBFS, quiet tails that fade sooner, and idle noise
+  at -79 dBFS.
+- No pitch modulation could be measured on the LX480 plate.
+- Diffusion, treble ratio and fixed point were compared by ear through
+  temporary menus. Chosen: diffusion "Sparse 2" (input x0.6, loop 0.3),
+  treble 0.85, 18 bit.
+
 ## Tried and dropped
+
+- **Diffusion** (input diffuser scale, loop all-pass gain): 1 / 0.5 (the
+  former tuning, dense within 100 ms), 0.6 / 0.5, 0.3 / 0.15 (sparser than
+  the LX480). Treble ratio 0.7 (the former, darker) and 1.0.
 
 - **Separate early reflections** (left-only and right-only taps, then a
   crossed inverted copy 33 to 37 ms later): the LX480 plate has no separable

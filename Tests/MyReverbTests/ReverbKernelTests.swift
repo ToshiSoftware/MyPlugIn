@@ -127,11 +127,62 @@ final class ReverbKernelTests: XCTestCase {
         var values = wetOnly
         values[.rt] = 2
         let kernel = makeKernel(values)
-        XCTAssertEqual(kernel.loopDiffusion, 0.5)
+        XCTAssertEqual(kernel.loopDiffusion, 0.3)
         kernel.highFrequencyRatio = 1
         kernel.reset()
         let response = render(kernel, left: impulse(seconds: 2.7)).left
         XCTAssertEqual(measuredT60(response), 2, accuracy: 0.2)
+    }
+
+    /// Light diffusion: the first 100 ms stay grainy like the LX480 plate
+    /// (normalized echo density there: 0.48 / 0.63 at 50 / 100 ms), and the
+    /// tail is fully dense by 500 ms.
+    func testEarlyTailStaysSparse() {
+        var values = wetOnly
+        values[.rt] = 2
+        let response = render(makeKernel(values), left: impulse(seconds: 0.6)).left
+        func echoDensity(at seconds: Double) -> Double {
+            var sum = 0.0
+            for offset in [-0.01, 0, 0.01] {
+                let center = Int((seconds + offset) * 48_000)
+                let window = response[(center - 480)..<(center + 480)]
+                let deviation = rms(window)
+                sum += Double(window.filter { Double(abs($0)) > deviation }.count) / Double(window.count) / 0.3173
+            }
+            return sum / 3
+        }
+        XCTAssertLessThan(echoDensity(at: 0.05), 0.55)
+        XCTAssertLessThan(echoDensity(at: 0.1), 0.8)
+        XCTAssertGreaterThan(echoDensity(at: 0.5), 0.85)
+    }
+
+    /// 18-bit line memories: a quiet input's tail fades out sooner than a
+    /// loud one's (scaled to the same level), as in fixed-point hardware;
+    /// loud tails are not affected.
+    func testQuietTailsFadeSoonerThanLoudOnes() {
+        var values = wetOnly
+        values[.rt] = 2
+        let loud = render(makeKernel(values), left: impulse(seconds: 3)).left
+        let quiet = render(makeKernel(values), left: impulse(seconds: 3).map { $0 * 0.01 }).left.map { $0 * 100 }
+        func level(_ s: [Float], _ from: Double, _ to: Double) -> Double {
+            rms(s[Int(from * 48_000)..<Int(to * 48_000)])
+        }
+        XCTAssertEqual(level(quiet, 0, 0.3) / level(loud, 0, 0.3), 1, accuracy: 0.05)
+        XCTAssertLessThan(level(quiet, 1.8, 2.5), level(loud, 1.8, 2.5) * 0.7)
+    }
+
+    /// After the tail the output is exact zeros, never denormals (fixed-point
+    /// lines; the float filters after the tank flush their own states).
+    func testSilentTailEndsInZerosNotDenormals() {
+        for hpf: Float in [80, 0] {
+            var values = wetOnly
+            values[.rt] = 2
+            values[.hpf] = hpf
+            let input = noise(seconds: 1) + [Float](repeating: 0, count: 48_000 * 14)
+            let output = render(makeKernel(values), left: input).left
+            XCTAssertFalse(output.contains { $0.isSubnormal }, "HPF \(hpf)")
+            XCTAssertTrue(output.suffix(48_000).allSatisfy { $0 == 0 }, "HPF \(hpf)")
+        }
     }
 
     // MARK: Levels and stability
