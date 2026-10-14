@@ -110,7 +110,7 @@ let outputFolder = URL(fileURLWithPath: arguments.first { !$0.hasPrefix("--") } 
 /// --manual: the channel each effect is shown on, and settings by identifier.
 let manualSetups: [String: (channel: String, values: [String: Float])] = [
     "MyReverb": ("FX 1", ["rt": 2.2, "preDelay": 0.025]),
-    "MyDelay": ("FX 2", ["time": 0.375, "feedback": 35]),
+    "MyDelay": ("FX 2", ["time": 0.375, "feedback": 35, "sync": 1, "sync_note": 3, "sync_type": 2]),
     "MyChannelStrip": ("Vocal", [
         "band1_type": 0, "band1_freq": 90,
         "band2_gain": -3, "band2_freq": 320, "band2_q": 1.4,

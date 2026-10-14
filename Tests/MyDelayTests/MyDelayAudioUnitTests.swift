@@ -6,8 +6,10 @@ import MyPlugInCore
 final class MyDelayAudioUnitTests: XCTestCase {
     private let frames: AUAudioFrameCount = 512
 
-    private func makeUnit(channels: AVAudioChannelCount = 2) throws -> MyDelayAudioUnit {
+    private func makeUnit(channels: AVAudioChannelCount = 2,
+                          musicalContext: AUHostMusicalContextBlock? = nil) throws -> MyDelayAudioUnit {
         let unit = try MyDelayAudioUnit(componentDescription: MyDelayAudioUnit.componentDescription)
+        unit.musicalContextBlock = musicalContext
         let format = AVAudioFormat(standardFormatWithSampleRate: 48_000, channels: channels)!
         try unit.inputBusses[0].setFormat(format)
         try unit.outputBusses[0].setFormat(format)
@@ -78,6 +80,70 @@ final class MyDelayAudioUnitTests: XCTestCase {
             left += output[0]
         }
         XCTAssertEqual(left.indices.filter { abs(left[$0]) > 1e-4 }.first, 960)
+    }
+
+    /// SYNC takes the tempo from the host's musical context: 1/16 at 150 BPM is 100 ms.
+    func testSyncedEchoFollowsTheHostTempo() throws {
+        let unit = try makeUnit(musicalContext: { tempo, numerator, denominator, _, _, _ in
+            tempo?.pointee = 150
+            numerator?.pointee = 4
+            denominator?.pointee = 4
+            return true
+        })
+        unit.parameterTree?.parameter(withAddress: address(.sync))?.value = 1
+        unit.parameterTree?.parameter(withAddress: address(.syncNote))?.value = Float(MyFXNoteLength.sixteenth.rawValue)
+        unit.parameterTree?.parameter(withAddress: address(.feedback))?.value = 0
+        unit.reset()
+        var left: [Float] = []
+        for block in 0..<12 {
+            let (status, output) = render(unit, sampleTime: Double(block) * Double(frames)) { channel, frame in
+                block == 0 && frame == 0 && channel == 0 ? 1 : 0
+            }
+            XCTAssertEqual(status, noErr)
+            left += output[0]
+        }
+        XCTAssertEqual((unit.kernel as? DelayKernel)?.hostTempo.beatsPerMinute, 150)
+        XCTAssertEqual(left.indices.filter { abs(left[$0]) > 1e-4 }, [4_800])
+    }
+
+    /// AVAudioEngine clears an AU's musicalContextBlock when it stops; the
+    /// in-process host context (MyDAW) survives a stop and restart.
+    func testHostContextSurvivesAnEngineRestart() throws {
+        MyFXHostContext.musicalContextBlock = { tempo, numerator, denominator, _, _, _ in
+            tempo?.pointee = 110
+            numerator?.pointee = 4
+            denominator?.pointee = 4
+            return true
+        }
+        defer { MyFXHostContext.musicalContextBlock = nil }
+        let description = AudioComponentDescription(componentType: kAudioUnitType_Effect, componentSubType: 0x5244_6C79,
+                                                    componentManufacturer: 0x546F_6B61, componentFlags: 0,
+                                                    componentFlagsMask: 0)
+        MyDelayAudioUnit.registerInProcess(as: description, name: "Toka: MyDelay Restart")
+        let instantiated = expectation(description: "instantiate")
+        var node: AVAudioUnit?
+        AVAudioUnit.instantiate(with: description, options: []) { audioUnit, _ in
+            node = audioUnit
+            instantiated.fulfill()
+        }
+        wait(for: [instantiated], timeout: 5)
+        let unit = try XCTUnwrap(node?.auAudioUnit as? MyDelayAudioUnit)
+        let engine = AVAudioEngine()
+        let format = AVAudioFormat(standardFormatWithSampleRate: 48_000, channels: 2)!
+        let player = AVAudioPlayerNode()
+        engine.attach(player)
+        engine.attach(node!)
+        engine.connect(player, to: node!, format: format)
+        engine.connect(node!, to: engine.mainMixerNode, format: format)
+        try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
+        let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
+        for _ in 0..<2 {
+            try engine.start()
+            _ = try engine.renderOffline(512, to: buffer)
+            XCTAssertEqual((unit.kernel as? DelayKernel)?.hostTempo.beatsPerMinute, 110)
+            engine.stop()
+            (unit.kernel as? DelayKernel)?.hostTempo.update(beatsPerMinute: 120, numerator: 4, denominator: 4)
+        }
     }
 
     func testScheduledModeChangeIsApplied() throws {

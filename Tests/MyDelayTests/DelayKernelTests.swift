@@ -1,5 +1,6 @@
 import XCTest
 @testable import MyDelay
+import MyPlugInCore
 
 final class DelayKernelTests: XCTestCase {
     private let sampleRate = 48_000.0
@@ -192,6 +193,31 @@ final class DelayKernelTests: XCTestCase {
         kernel.isBypassed = true
         let input = noise(seconds: 0.2)
         XCTAssertEqual(render(kernel, left: input, right: input).left, input)
+    }
+
+    /// SYNC: TIME is the note length at the host's tempo (120 BPM until the
+    /// host tells), within 1 ms to 10 s; the TIME fader is ignored.
+    func testSyncFollowsTheHostTempo() {
+        let kernel = makeKernel(.mono, [.feedback: 0, .sync: 1,
+                                        .syncNote: Float(MyFXNoteLength.sixteenth.rawValue)])
+        XCTAssertEqual(kernel.effectiveTime, 0.125, accuracy: 1e-9)
+        kernel.hostTempo.update(beatsPerMinute: 150, numerator: 4, denominator: 4)
+        kernel.reset()
+        let input = leftImpulse()
+        let (left, _) = render(kernel, left: input.left, right: input.right)
+        XCTAssertEqual(hits(left), [echo])
+
+        kernel.setTarget(.syncType, Float(MyFXNoteType.dotted.rawValue))
+        XCTAssertEqual(kernel.effectiveTime, 0.15, accuracy: 1e-9)
+        kernel.setTarget(.syncType, Float(MyFXNoteType.triplet.rawValue))
+        XCTAssertEqual(kernel.effectiveTime, 0.1 * 2 / 3, accuracy: 1e-9)
+        kernel.setTarget(.syncNote, Float(MyFXNoteLength.fourBars.rawValue))
+        kernel.setTarget(.syncType, Float(MyFXNoteType.dotted.rawValue))
+        XCTAssertEqual(kernel.effectiveTime, 9.6, accuracy: 1e-6)
+        kernel.hostTempo.update(beatsPerMinute: 60, numerator: 4, denominator: 4)
+        XCTAssertEqual(kernel.effectiveTime, 10, "24 s, capped at TIME's 10 s")
+        kernel.setTarget(.sync, 0)
+        XCTAssertEqual(kernel.effectiveTime, 0.1, accuracy: 1e-6)
     }
 
     func testTailTime() {

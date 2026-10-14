@@ -284,6 +284,81 @@ final class MyChorusPanTests: XCTestCase {
         }
     }
 
+    /// SYNC: one bar at the host's 120 BPM is a 2 s cycle, as 0.5 Hz above;
+    /// SPEED is ignored, and the host's tempo moves the speed.
+    func testAutoPanSyncFollowsTheHostTempo() {
+        var values = autoPan
+        values[.panType] = Float(ChorusPanWave.square.rawValue)
+        values[.panSpeed] = 7
+        values[.panSync] = 1
+        values[.panSyncNote] = Float(MyFXNoteLength.oneBar.rawValue)
+        let kernel = makeKernel(values)
+        XCTAssertEqual(kernel.panSpeed, 0.5, accuracy: 1e-9)
+        let input = [Float](repeating: 0.5, count: seconds(2))
+        let (left, right) = render(kernel, left: input)
+        XCTAssertEqual(left[seconds(0.5)], 0, accuracy: 1e-4)
+        XCTAssertEqual(right[seconds(1.5)], 0, accuracy: 1e-4)
+
+        kernel.hostTempo.update(beatsPerMinute: 90, numerator: 4, denominator: 4)
+        kernel.setTarget(.panSyncNote, Float(MyFXNoteLength.eighth.rawValue))
+        kernel.setTarget(.panSyncType, Float(MyFXNoteType.triplet.rawValue))
+        XCTAssertEqual(kernel.panSpeed, 1 / (0.5 * 2 / 3 * 60 / 90), accuracy: 1e-9) // 4.5 Hz
+        kernel.setTarget(.panSync, 0)
+        XCTAssertEqual(kernel.panSpeed, 7, accuracy: 1e-6)
+    }
+
+    /// SYNC while the host plays: the cycle locks to the song position.
+    /// 1 bar at 110 BPM, playback starting at beat 2 (half a bar in): Square
+    /// is already in its second half (left), and switches back to the right
+    /// exactly on the next bar line (beat 4).
+    func testAutoPanSyncLocksToTheBars() {
+        var values = autoPan
+        values[.panType] = Float(ChorusPanWave.square.rawValue)
+        values[.panSync] = 1
+        values[.panSyncNote] = Float(MyFXNoteLength.oneBar.rawValue)
+        let kernel = makeKernel(values)
+        let bpm = 110.0
+        let startBeat = 2.0
+        let input = [Float](repeating: 0.5, count: seconds(2))
+        let (left, right) = render(kernel, left: input) { block in
+            kernel.hostTempo.update(beatsPerMinute: bpm, numerator: 4, denominator: 4)
+            let elapsed = Double(block * self.blockSize) / self.sampleRate
+            kernel.hostTempo.updatePosition(beatPosition: startBeat + elapsed * bpm / 60)
+        }
+        let full = 0.5 * Float(2).squareRoot()
+        XCTAssertEqual(left[seconds(0.1)], full, accuracy: 1e-3, "second half of the bar: left")
+        XCTAssertEqual(right[seconds(0.1)], 0, accuracy: 1e-3)
+        // The bar line: 2 beats after the start.
+        let barLine = seconds(2 * 60 / bpm)
+        let crossing = (seconds(0.2)..<left.count).first { right[$0] > left[$0] }!
+        // The switch starts on the bar line; two 10 ms stages reach the
+        // middle (equal levels) 1.68 x 10 ms later.
+        XCTAssertEqual(Double(crossing - barLine) / sampleRate, 0.0168, accuracy: 0.002,
+                       "switches to the right on the bar line")
+
+        // Transport stopped: no position, the LFO runs on by itself.
+        kernel.hostTempo.updatePosition(beatPosition: nil)
+        XCTAssertNil(kernel.hostTempo.cyclePhase(.oneBar, .normal))
+    }
+
+    /// Square's switch glides through two 10 ms stages, not a pop: the
+    /// left gain takes about 21 ms from 10 % to 90 % (with 5 ms stages, 10 ms).
+    func testAutoPanSquareSwitchTakesTensOfMilliseconds() {
+        var values = autoPan
+        values[.panType] = Float(ChorusPanWave.square.rawValue)
+        values[.panSpeed] = 0.5
+        let input = [Float](repeating: 0.5, count: seconds(1.5))
+        let (left, _) = render(makeKernel(values), left: input)
+        // Left goes from 0 to 0.5 x sqrt 2 after the switch at 1 s.
+        let full = 0.5 * Float(2).squareRoot()
+        let start = seconds(1)
+        let low = (start..<left.count).first { left[$0] > 0.1 * full }!
+        let high = (start..<left.count).first { left[$0] > 0.9 * full }!
+        let rise = Double(high - low) / sampleRate
+        XCTAssertGreaterThan(rise, 0.017)
+        XCTAssertLessThan(rise, 0.026)
+    }
+
     /// Square's switch and Saw's drop are smoothed (5 ms): no jump.
     func testAutoPanEdgesAreSmoothed() {
         for wave in [ChorusPanWave.square, .saw] {
@@ -335,7 +410,8 @@ final class MyChorusPanTests: XCTestCase {
         XCTAssertEqual(ChorusPanMode.dimension.parameters,
                        [.dimensionMode, .dimensionStereoWidth, .dimensionMix, .dimensionBoost])
         XCTAssertEqual(ChorusPanMode.flanger.parameters.count, 8)
-        XCTAssertEqual(ChorusPanMode.autoPan.parameters, [.panType, .panSpeed, .panWidth])
+        XCTAssertEqual(ChorusPanMode.autoPan.parameters,
+                       [.panType, .panSpeed, .panWidth, .panSync, .panSyncNote, .panSyncType])
         let all = ChorusPanMode.allCases.flatMap(\.parameters) + [.mode]
         XCTAssertEqual(Set(all), Set(ChorusPanParameter.allCases))
         XCTAssertEqual(ChorusPanParameter.flangerFeedback.defaultValue, 60)
